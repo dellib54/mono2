@@ -136,12 +136,18 @@ if not plot_df.empty:
     st.line_chart(hum_wide)
 
 st.download_button(
-    label="Download CSV",
+    label="Download aggregated data as CSV",
     data=convert_for_download(plot_df),
     file_name="data_aggregated.csv",
     mime="text/csv",
 )
 
+st.download_button(
+    label="Download raw data as CSV",
+    data=convert_for_download(base_df),
+    file_name="data_raw.csv",
+    mime="text/csv",
+)
 # --- detailed table (optional)
 with st.expander("Show aggregated data table"):
     st.dataframe(plot_df.sort_values("TS_BUCKET"), use_container_width=True)
