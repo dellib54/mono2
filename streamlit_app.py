@@ -1,9 +1,19 @@
 import streamlit as st
 import pandas as pd
-import io
 from datetime import datetime, timedelta, date
-from snowflake.snowpark.context import get_active_session
+from snowflake.snowpark import Session
 from snowflake.snowpark.functions import col, lit, call_function
+import snowflake.connector
+
+# Ensure you set up Snowflake connection using st.secrets or environment variables
+snowflake_options = {
+    "account": st.secrets["snowflake_account"],
+    "user": st.secrets["snowflake_user"],
+    "password": st.secrets["snowflake_password"],
+    "warehouse": st.secrets["snowflake_warehouse"],
+    "database": st.secrets["snowflake_database"],
+    "schema": st.secrets["snowflake_schema"],
+}
 
 # @st.fragment
 @st.cache_data
@@ -13,7 +23,9 @@ def convert_for_download(df):
 st.set_page_config(page_title="Temperature & Humidity Trends", layout="wide")
 st.title("🌡️ Temperature & 💧 Humidity Trends")
 
-session = get_active_session()
+# Snowflake session initialization
+session = Session.builder.configs(snowflake_options).create()
+
 base_df = session.table("telemetry_curated")
 
 # --- sidebar filters
@@ -126,10 +138,7 @@ st.download_button(
     data=convert_for_download(plot_df),
     file_name="data_aggregated.csv",
     mime="text/csv",
-    # icon=":material/download:",
 )
-
-st.button("A")
 
 # --- detailed table (optional)
 with st.expander("Show aggregated data table"):
