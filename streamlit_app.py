@@ -144,7 +144,7 @@ st.download_button(
 
 st.download_button(
     label="Download raw data as CSV",
-    data=convert_for_download(df),
+    data=convert_for_download(pdf),
     file_name="data_raw.csv",
     mime="text/csv",
 )
