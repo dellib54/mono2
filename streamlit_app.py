@@ -6,14 +6,14 @@ from snowflake.snowpark.functions import col, lit, call_function
 import snowflake.connector
 
 # Ensure you set up Snowflake connection using st.secrets or environment variables
-snowflake_options = {
-    "account": st.secrets["snowflake_account"],
-    "user": st.secrets["snowflake_user"],
-    "password": st.secrets["snowflake_password"],
-    "warehouse": st.secrets["snowflake_warehouse"],
-    "database": st.secrets["snowflake_database"],
-    "schema": st.secrets["snowflake_schema"],
-}
+# snowflake_options = {
+#     "account": st.secrets["snowflake_account"],
+#     "user": st.secrets["snowflake_user"],
+#     "password": st.secrets["snowflake_password"],
+#     "warehouse": st.secrets["snowflake_warehouse"],
+#     "database": st.secrets["snowflake_database"],
+#     "schema": st.secrets["snowflake_schema"],
+# }
 
 # @st.fragment
 @st.cache_data
@@ -24,7 +24,9 @@ st.set_page_config(page_title="Temperature & Humidity Trends", layout="wide")
 st.title("🌡️ Temperature & 💧 Humidity Trends")
 
 # Snowflake session initialization
-session = Session.builder.configs(snowflake_options).create()
+# session = Session.builder.configs(snowflake_options).create()
+cnx = st.connection("snowflake")
+session = cnx.session()
 
 base_df = session.table("telemetry_curated")
 
